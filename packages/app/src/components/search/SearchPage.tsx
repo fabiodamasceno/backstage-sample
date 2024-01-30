@@ -1,29 +1,31 @@
-import React from 'react';
-import { makeStyles, Theme, Grid, Paper } from '@material-ui/core';
+import React from 'react'
+import { makeStyles, Theme, Grid, Paper } from '@material-ui/core'
 
-import { CatalogSearchResultListItem } from '@backstage/plugin-catalog';
+import { CatalogSearchResultListItem } from '@backstage/plugin-catalog'
 import {
   catalogApiRef,
   CATALOG_FILTER_EXISTS,
-} from '@backstage/plugin-catalog-react';
-import { TechDocsSearchResultListItem } from '@backstage/plugin-techdocs';
+} from '@backstage/plugin-catalog-react'
+import { TechDocsSearchResultListItem } from '@backstage/plugin-techdocs'
 
-import { SearchType } from '@backstage/plugin-search';
+import { SearchType } from '@backstage/plugin-search'
 import {
   SearchBar,
   SearchFilter,
   SearchResult,
   SearchPagination,
   useSearch,
-} from '@backstage/plugin-search-react';
+} from '@backstage/plugin-search-react'
 import {
   CatalogIcon,
   Content,
   DocsIcon,
   Header,
   Page,
-} from '@backstage/core-components';
-import { useApi } from '@backstage/core-plugin-api';
+} from '@backstage/core-components'
+import { useApi } from '@backstage/core-plugin-api'
+import { AdrSearchResultListItem } from '@backstage/plugin-adr'
+import { AdrDocument } from '@backstage/plugin-adr-common'
 
 const useStyles = makeStyles((theme: Theme) => ({
   bar: {
@@ -38,12 +40,12 @@ const useStyles = makeStyles((theme: Theme) => ({
       marginTop: theme.spacing(2.5),
     },
   },
-}));
+}))
 
 const SearchPage = () => {
-  const classes = useStyles();
-  const { types } = useSearch();
-  const catalogApi = useApi(catalogApiRef);
+  const classes = useStyles()
+  const { types } = useSearch()
+  const catalogApi = useApi(catalogApiRef)
 
   return (
     <Page themeId="home">
@@ -70,8 +72,14 @@ const SearchPage = () => {
                   name: 'Documentation',
                   icon: <DocsIcon />,
                 },
+                {
+                  value: 'adr',
+                  name: 'Architecture Decision Records',
+                  icon: <DocsIcon />,
+                },
               ]}
             />
+
             <Paper className={classes.filters}>
               {types.includes('techdocs') && (
                 <SearchFilter.Select
@@ -86,11 +94,11 @@ const SearchPage = () => {
                         'metadata.annotations.backstage.io/techdocs-ref':
                           CATALOG_FILTER_EXISTS,
                       },
-                    });
+                    })
 
-                    const names = items.map(entity => entity.metadata.name);
-                    names.sort();
-                    return names;
+                    const names = items.map(entity => entity.metadata.name)
+                    names.sort()
+                    return names
                   }}
                 />
               )}
@@ -118,7 +126,7 @@ const SearchPage = () => {
         </Grid>
       </Content>
     </Page>
-  );
-};
+  )
+}
 
-export const searchPage = <SearchPage />;
+export const searchPage = <SearchPage />

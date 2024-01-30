@@ -1,0 +1,24 @@
+version: '3.4'
+
+networks:
+  dev:
+    driver: bridge
+
+services:
+  backstage_db:
+    image: postgres:latest
+    container_name: backstage_db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=backstage
+    ports:
+      - '5432:5432'
+    restart: always
+    volumes:
+      - backstage_data:/var/lib/postgresql/data/
+    networks:
+      - dev
+
+volumes:
+  backstage_data:

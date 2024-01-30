@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button, Grid } from '@material-ui/core';
+import React from 'react'
+import { Button, Grid } from '@material-ui/core'
 import {
   EntityApiDefinitionCard,
   EntityConsumedApisCard,
@@ -7,7 +7,7 @@ import {
   EntityHasApisCard,
   EntityProvidedApisCard,
   EntityProvidingComponentsCard,
-} from '@backstage/plugin-api-docs';
+} from '@backstage/plugin-api-docs'
 import {
   EntityAboutCard,
   EntityDependsOnComponentsCard,
@@ -27,23 +27,23 @@ import {
   isOrphan,
   hasRelationWarnings,
   EntityRelationWarning,
-} from '@backstage/plugin-catalog';
+} from '@backstage/plugin-catalog'
 import {
   isGithubActionsAvailable,
   EntityGithubActionsContent,
-} from '@backstage/plugin-github-actions';
+} from '@backstage/plugin-github-actions'
 import {
   EntityUserProfileCard,
   EntityGroupProfileCard,
   EntityMembersListCard,
   EntityOwnershipCard,
-} from '@backstage/plugin-org';
-import { EntityTechdocsContent } from '@backstage/plugin-techdocs';
-import { EmptyState } from '@backstage/core-components';
+} from '@backstage/plugin-org'
+import { EntityTechdocsContent } from '@backstage/plugin-techdocs'
+import { EmptyState } from '@backstage/core-components'
 import {
   Direction,
   EntityCatalogGraphCard,
-} from '@backstage/plugin-catalog-graph';
+} from '@backstage/plugin-catalog-graph'
 import {
   RELATION_API_CONSUMED_BY,
   RELATION_API_PROVIDED_BY,
@@ -53,10 +53,12 @@ import {
   RELATION_HAS_PART,
   RELATION_PART_OF,
   RELATION_PROVIDES_API,
-} from '@backstage/catalog-model';
+} from '@backstage/catalog-model'
 
-import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
-import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
+import { TechDocsAddons } from '@backstage/plugin-techdocs-react'
+import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib'
+import { EntityAdrContent, isAdrAvailable } from '@backstage/plugin-adr'
+import { EntityScoreCardContent } from '@oriflame/backstage-plugin-score-card'
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -64,7 +66,7 @@ const techdocsContent = (
       <ReportIssue />
     </TechDocsAddons>
   </EntityTechdocsContent>
-);
+)
 
 const cicdContent = (
   // This is an example of how you can implement your company's logic in entity page.
@@ -91,7 +93,7 @@ const cicdContent = (
       />
     </EntitySwitch.Case>
   </EntitySwitch>
-);
+)
 
 const entityWarningContent = (
   <>
@@ -119,7 +121,7 @@ const entityWarningContent = (
       </EntitySwitch.Case>
     </EntitySwitch>
   </>
-);
+)
 
 const overviewContent = (
   <Grid container spacing={3} alignItems="stretch">
@@ -138,7 +140,7 @@ const overviewContent = (
       <EntityHasSubcomponentsCard variant="gridItem" />
     </Grid>
   </Grid>
-);
+)
 
 const serviceEntityPage = (
   <EntityLayout>
@@ -175,8 +177,11 @@ const serviceEntityPage = (
     <EntityLayout.Route path="/docs" title="Docs">
       {techdocsContent}
     </EntityLayout.Route>
+    <EntityLayout.Route if={isAdrAvailable} path="/adrs" title="ADRs">
+      <EntityAdrContent />
+    </EntityLayout.Route>
   </EntityLayout>
-);
+)
 
 const websiteEntityPage = (
   <EntityLayout>
@@ -203,7 +208,7 @@ const websiteEntityPage = (
       {techdocsContent}
     </EntityLayout.Route>
   </EntityLayout>
-);
+)
 
 /**
  * NOTE: This page is designed to work on small screens such as mobile devices.
@@ -222,7 +227,7 @@ const defaultEntityPage = (
       {techdocsContent}
     </EntityLayout.Route>
   </EntityLayout>
-);
+)
 
 const componentPage = (
   <EntitySwitch>
@@ -236,7 +241,7 @@ const componentPage = (
 
     <EntitySwitch.Case>{defaultEntityPage}</EntitySwitch.Case>
   </EntitySwitch>
-);
+)
 
 const apiPage = (
   <EntityLayout>
@@ -271,7 +276,7 @@ const apiPage = (
       </Grid>
     </EntityLayout.Route>
   </EntityLayout>
-);
+)
 
 const userPage = (
   <EntityLayout>
@@ -287,7 +292,7 @@ const userPage = (
       </Grid>
     </EntityLayout.Route>
   </EntityLayout>
-);
+)
 
 const groupPage = (
   <EntityLayout>
@@ -309,7 +314,7 @@ const groupPage = (
       </Grid>
     </EntityLayout.Route>
   </EntityLayout>
-);
+)
 
 const systemPage = (
   <EntityLayout>
@@ -355,8 +360,15 @@ const systemPage = (
         unidirectional={false}
       />
     </EntityLayout.Route>
+    <EntityLayout.Route path="/score" title="Score">
+      <Grid container spacing={3} alignItems="stretch">
+        <Grid item xs={12}>
+          <EntityScoreCardContent />
+        </Grid>
+      </Grid>
+    </EntityLayout.Route>
   </EntityLayout>
-);
+)
 
 const domainPage = (
   <EntityLayout>
@@ -375,7 +387,7 @@ const domainPage = (
       </Grid>
     </EntityLayout.Route>
   </EntityLayout>
-);
+)
 
 export const entityPage = (
   <EntitySwitch>
@@ -388,4 +400,4 @@ export const entityPage = (
 
     <EntitySwitch.Case>{defaultEntityPage}</EntitySwitch.Case>
   </EntitySwitch>
-);
+)

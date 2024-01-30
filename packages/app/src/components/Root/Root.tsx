@@ -1,17 +1,18 @@
-import React, { PropsWithChildren } from 'react';
-import { makeStyles } from '@material-ui/core';
-import HomeIcon from '@material-ui/icons/Home';
-import ExtensionIcon from '@material-ui/icons/Extension';
-import MapIcon from '@material-ui/icons/MyLocation';
-import LibraryBooks from '@material-ui/icons/LibraryBooks';
-import CreateComponentIcon from '@material-ui/icons/AddCircleOutline';
-import LogoFull from './LogoFull';
-import LogoIcon from './LogoIcon';
+import React, { PropsWithChildren } from 'react'
+import { makeStyles } from '@material-ui/core'
+import HomeIcon from '@material-ui/icons/Home'
+import ExtensionIcon from '@material-ui/icons/Extension'
+import MapIcon from '@material-ui/icons/MyLocation'
+import LibraryBooks from '@material-ui/icons/LibraryBooks'
+import Score from '@material-ui/icons/Score'
+import CreateComponentIcon from '@material-ui/icons/AddCircleOutline'
+import LogoFull from './LogoFull'
+import LogoIcon from './LogoIcon'
 import {
   Settings as SidebarSettings,
   UserSettingsSignInAvatar,
-} from '@backstage/plugin-user-settings';
-import { SidebarSearchModal } from '@backstage/plugin-search';
+} from '@backstage/plugin-user-settings'
+import { SidebarSearchModal } from '@backstage/plugin-search'
 import {
   Sidebar,
   sidebarConfig,
@@ -23,9 +24,9 @@ import {
   SidebarSpace,
   useSidebarOpenState,
   Link,
-} from '@backstage/core-components';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
+} from '@backstage/core-components'
+import MenuIcon from '@material-ui/icons/Menu'
+import SearchIcon from '@material-ui/icons/Search'
 
 const useSidebarLogoStyles = makeStyles({
   root: {
@@ -40,11 +41,11 @@ const useSidebarLogoStyles = makeStyles({
     width: sidebarConfig.drawerWidthClosed,
     marginLeft: 24,
   },
-});
+})
 
 const SidebarLogo = () => {
-  const classes = useSidebarLogoStyles();
-  const { isOpen } = useSidebarOpenState();
+  const classes = useSidebarLogoStyles()
+  const { isOpen } = useSidebarOpenState()
 
   return (
     <div className={classes.root}>
@@ -52,8 +53,8 @@ const SidebarLogo = () => {
         {isOpen ? <LogoFull /> : <LogoIcon />}
       </Link>
     </div>
-  );
-};
+  )
+}
 
 export const Root = ({ children }: PropsWithChildren<{}>) => (
   <SidebarPage>
@@ -73,6 +74,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarDivider />
         <SidebarScrollWrapper>
           <SidebarItem icon={MapIcon} to="tech-radar" text="Tech Radar" />
+          <SidebarItem icon={Score} to="score-board" text="Score board" />
         </SidebarScrollWrapper>
       </SidebarGroup>
       <SidebarSpace />
@@ -87,4 +89,4 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
     </Sidebar>
     {children}
   </SidebarPage>
-);
+)

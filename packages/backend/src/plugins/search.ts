@@ -1,13 +1,15 @@
-import { useHotCleanup } from '@backstage/backend-common';
-import { createRouter } from '@backstage/plugin-search-backend';
+import { useHotCleanup } from '@backstage/backend-common'
+import { createRouter } from '@backstage/plugin-search-backend'
 import {
   IndexBuilder,
   LunrSearchEngine,
-} from '@backstage/plugin-search-backend-node';
-import { PluginEnvironment } from '../types';
-import { DefaultCatalogCollatorFactory } from '@backstage/plugin-search-backend-module-catalog';
-import { DefaultTechDocsCollatorFactory } from '@backstage/plugin-search-backend-module-techdocs';
-import { Router } from 'express';
+} from '@backstage/plugin-search-backend-node'
+import { PluginEnvironment } from '../types'
+import { DefaultCatalogCollatorFactory } from '@backstage/plugin-search-backend-module-catalog'
+import { DefaultTechDocsCollatorFactory } from '@backstage/plugin-search-backend-module-techdocs'
+import { DefaultAdrCollatorFactory } from '@backstage/plugin-adr-backend'
+
+import { Router } from 'express'
 
 export default async function createPlugin(
   env: PluginEnvironment,
@@ -15,11 +17,11 @@ export default async function createPlugin(
   // Initialize a connection to a search engine.
   const searchEngine = new LunrSearchEngine({
     logger: env.logger,
-  });
+  })
   const indexBuilder = new IndexBuilder({
     logger: env.logger,
     searchEngine,
-  });
+  })
 
   const schedule = env.scheduler.createScheduledTaskRunner({
     frequency: { minutes: 10 },
@@ -27,7 +29,7 @@ export default async function createPlugin(
     // A 3 second delay gives the backend server a chance to initialize before
     // any collators are executed, which may attempt requests against the API.
     initialDelay: { seconds: 3 },
-  });
+  })
 
   // Collators are responsible for gathering documents known to plugins. This
   // collator gathers entities from the software catalog.
@@ -37,7 +39,7 @@ export default async function createPlugin(
       discovery: env.discovery,
       tokenManager: env.tokenManager,
     }),
-  });
+  })
 
   // collator gathers entities from techdocs.
   indexBuilder.addCollator({
@@ -47,14 +49,26 @@ export default async function createPlugin(
       logger: env.logger,
       tokenManager: env.tokenManager,
     }),
-  });
+  })
+
+  indexBuilder.addCollator({
+    schedule,
+    factory: DefaultAdrCollatorFactory.fromConfig({
+      cache: env.cache,
+      config: env.config,
+      discovery: env.discovery,
+      logger: env.logger,
+      reader: env.reader,
+      tokenManager: env.tokenManager,
+    }),
+  })
 
   // The scheduler controls when documents are gathered from collators and sent
   // to the search engine for indexing.
-  const { scheduler } = await indexBuilder.build();
-  scheduler.start();
+  const { scheduler } = await indexBuilder.build()
+  scheduler.start()
 
-  useHotCleanup(module, () => scheduler.stop());
+  useHotCleanup(module, () => scheduler.stop())
 
   return await createRouter({
     engine: indexBuilder.getSearchEngine(),
@@ -62,5 +76,5 @@ export default async function createPlugin(
     permissions: env.permissions,
     config: env.config,
     logger: env.logger,
-  });
+  })
 }

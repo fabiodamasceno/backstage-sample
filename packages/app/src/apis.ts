@@ -2,12 +2,16 @@ import {
   ScmIntegrationsApi,
   scmIntegrationsApiRef,
   ScmAuth,
-} from '@backstage/integration-react';
+} from '@backstage/integration-react'
 import {
   AnyApiFactory,
   configApiRef,
   createApiFactory,
-} from '@backstage/core-plugin-api';
+  identityApiRef,
+  analyticsApiRef,
+} from '@backstage/core-plugin-api'
+
+import { GoogleAnalytics } from '@backstage/plugin-analytics-module-ga'
 
 export const apis: AnyApiFactory[] = [
   createApiFactory({
@@ -15,5 +19,13 @@ export const apis: AnyApiFactory[] = [
     deps: { configApi: configApiRef },
     factory: ({ configApi }) => ScmIntegrationsApi.fromConfig(configApi),
   }),
+  createApiFactory({
+    api: analyticsApiRef,
+    deps: { configApi: configApiRef, identityApi: identityApiRef },
+    factory: ({ configApi, identityApi }) =>
+      GoogleAnalytics.fromConfig(configApi, {
+        identityApi,
+      }),
+  }),
   ScmAuth.createDefaultApiFactory(),
-];
+]
